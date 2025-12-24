@@ -1,15 +1,22 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import enums.Channel;
+import factory.DefaultNotificationSenderFactory;
+import factory.NotificationSenderFactory;
+import notification.EmailNotification;
+import notification.Notification;
+import notification.SMSNotification;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        NotificationSenderFactory notificationSenderFactory = new DefaultNotificationSenderFactory();
+        NotificationDispatcher notificationDispatcher = new NotificationDispatcher(notificationSenderFactory);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        Notification emailNotification = new EmailNotification(Channel.EMAIL, "Email notification content", "john@gmail.com");
+        Notification smsNotification = new SMSNotification(Channel.SMS, "SMS notification content", "+91-12345");
+
+        notificationDispatcher.dispatch(emailNotification);
+        notificationDispatcher.dispatch(smsNotification);
+
+        notificationDispatcher.schedule(emailNotification, 10);
+        notificationDispatcher.schedule(smsNotification, 12);
     }
 }
